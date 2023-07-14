@@ -64,7 +64,9 @@ def checkItemRarity(top, bottom, left, right, originalImage, inventoryImage):
     return rarity
 
 
-def checkItemAmount(top, bottom, left, right, originalImage, inventoryImage, item, rarity):
+def checkItemAmount(
+    top, bottom, left, right, originalImage, inventoryImage, item, rarity
+):
     matchedValue = originalImage.copy()
     matchedValue = originalImage[top:bottom, left:right]
     matchedValue[np.all(matchedValue <= (210, 210, 210, 255), axis=-1)] = (0, 0, 0, 255)
@@ -74,7 +76,7 @@ def checkItemAmount(top, bottom, left, right, originalImage, inventoryImage, ite
         EpicMin = np.array([0, 0, 0, 255], np.uint8)
         EpicMax = np.array([120, 200, 255, 255], np.uint8)
         matchedValue[cv2.inRange(matchedValue, EpicMin, EpicMax) > 0] = [0, 0, 0, 255]
-    
+
     # Exorcism bauble tweak
     if item == "exorcism_bauble":
         GreenMin = np.array([94, 200, 120, 255], np.uint8)
@@ -164,26 +166,33 @@ def searchItem(
             originalImage,
             inventoryImage,
             item,
-            itemRarity
+            itemRarity,
         )
         isTraddable = findTraddables(frame, top, left, tradeIcon, inventoryImage)
-        hasProperty = (
-            PlayerInventory.get(item)
-            and PlayerInventory.get(item).get(itemRarity) is not None
-        )
 
         try:
             itemAmount = int(itemAmount)
-            if hasProperty:
-                if isTraddable:
-                    PlayerInventory[item][itemRarity]["traddable"] = itemAmount
-                else:
-                    PlayerInventory[item][itemRarity]["nonTraddable"] = itemAmount
-            else:
-                if isTraddable:
-                    PlayerInventory[item] = {itemRarity: {"traddable": itemAmount}}
-                else:
-                    PlayerInventory[item] = {itemRarity: {"nonTraddable": itemAmount}}
+            otherRarities = (
+                PlayerInventory.get(item).get(itemRarity)
+                if PlayerInventory.get(item) is not None
+                and PlayerInventory.get(item).get(itemRarity) is not None
+                else {}
+            )
+
+            PlayerInventory.update(
+                {
+                    **PlayerInventory,
+                    item: {
+                        **(PlayerInventory.get(item) or {}),
+                        itemRarity: {
+                            **otherRarities,
+                            (
+                                "traddable" if isTraddable else "nonTraddable"
+                            ): itemAmount,
+                        },
+                    },
+                }
+            )
         except:
             continue
 
