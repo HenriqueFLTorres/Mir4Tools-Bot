@@ -8,11 +8,8 @@ import utils
 import cv2
 import numpy as np
 import imutils
-import pytesseract
 import json
 from translation import en, pt
-
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract"
 
 items = [
     "anima_stone",
@@ -42,8 +39,7 @@ bottomRightPadding = 62
 
 load_dotenv()
 
-intents = discord.Intents.default()
-intents.message_content = True
+intents = discord.Intents.all()
 
 my_guild = discord.Object(id=1127618095687671909)
 
@@ -90,10 +86,10 @@ async def on_message(message):
             originalImage = utils.addAlphaChannels(inventoryImage)
 
             inventoryImage = originalImage.copy()
-            trade = cv2.imread(r"C:\Users\rical\Documents\VCS\Mir4ToolsBot\trade.png", cv2.IMREAD_UNCHANGED)
+            trade = cv2.imread(r".\trade.png", cv2.IMREAD_UNCHANGED)
 
             for item in items:
-                itemTemplate = cv2.imread(rf"C:\Users\rical\Desktop\Testing\items\{item}.png", cv2.IMREAD_UNCHANGED)
+                itemTemplate = cv2.imread(rf".\items\{item}.png", cv2.IMREAD_UNCHANGED)
                 itemTemplate = itemTemplate[leftTopPadding:bottomRightPadding, leftTopPadding:bottomRightPadding]
                 itemTemplate = imutils.resize(
                     itemTemplate, width=int(itemTemplate.shape[1] * GLOBAL_SCALE)
@@ -141,39 +137,52 @@ class BotViewPT(discord.ui.View):
     async def button_callback(self, interaction, _):
         await interaction.response.send_message(f"Este é um objeto JSON, copie e cole em seu inventário de https://www.mir4tools.com/ \n\n```json\n{json.dumps(self.inventory, indent=2)}\n```\n", ephemeral=True)
 
-@client.tree.command(description = "Set up discord roles embedded links")
-async def roles_management(interaction: discord.Interaction):
-    embed = discord.Embed(title="Select your role", color=0x2C2542, type="rich", description="📢 Get pinged when a new update came out.\n📢 Receba um ping quando uma nova atualização for lançada.\n\n:flag_us: English (US)\n:flag_br: Português (PT-BR)")
-    embed.set_thumbnail(url=client.user.avatar)
-    await interaction.response.send_message(embed=embed, view=RoleManagementView())
+@client.event
+async def on_reaction_add(reaction: discord.Reaction, user: discord.Member):
+    if reaction.message.channel.id != 1129159066086801578:
+        return
 
-class RoleManagementView(discord.ui.View):
-    def __init__(self):
-        super().__init__()
-
-    @discord.ui.button(label="English (US)", style=discord.ButtonStyle.primary)
-    async def englishLanguage(self, interaction: discord.Interaction, _):
-        await toggleRole(1129148272309702756, interaction)
-
-    @discord.ui.button(label="Português (PT-BR)", style=discord.ButtonStyle.primary)
-    async def portugueseLanguage(self, interaction, _):
-        await toggleRole(1129148360591425596, interaction)
-
-    @discord.ui.button(label="Receive Updates", style=discord.ButtonStyle.primary, emoji="📢")
-    async def receiveUpdates(self, interaction, _):
-        await toggleRole(1129148508721647657, interaction)
-
-async def toggleRole(id: int, interaction: discord.Interaction):
-    role = discord.Object(id=id)
-    if (interaction.user.get_role(id) is not None):
-        await interaction.user.remove_roles(role, reason="auto role")
-    else:
-        await interaction.user.add_roles(role, reason="auto role")
+    emoji = str(reaction.emoji)
+    if emoji == "🇺🇸":
+        await toggleRole(1129148272309702756, user, True)
+    if emoji == "🇧🇷":
+        await toggleRole(1129148360591425596, user, True)
+    if emoji == "📢":
+        await toggleRole(1129148508721647657, user, True)
+        
+@client.event
+async def on_reaction_remove(reaction: discord.Reaction, user: discord.Member):
+    if reaction.message.channel.id != 1129159066086801578:
+        return
     
-    await interaction.response.defer()
+    emoji = str(reaction.emoji)
+    if emoji == "🇺🇸":
+        await toggleRole(1129148272309702756, user, False)
+    if emoji == "🇧🇷":
+        await toggleRole(1129148360591425596, user, False)
+    if emoji == "📢":
+        await toggleRole(1129148508721647657, user, False)
+
+async def toggleRole(id: int, user: discord.Member, add: bool):
+    role = discord.Object(id)
+
+    if (add):
+        return await user.add_roles(role)
+    else:
+        return await user.remove_roles(role)
 
 @client.event
 async def on_ready():
+    channel = client.get_channel(1129159066086801578)
+    async for message in channel.history(limit=5):
+        await message.delete()
+
+    message = await channel.send(content="# Select your role\n\n:loudspeaker:  Get pinged when a new update came out.\n:loudspeaker:  Receba um ping quando uma nova atualização for lançada.\n\n:flag_us:  English (US)\n:flag_br:  Português (PT-BR)")
+
+    await message.add_reaction("🇺🇸")
+    await message.add_reaction("🇧🇷")
+    await message.add_reaction("📢")
+
     print(f"{client.user} is ready and online!")
 
 client.run(os.getenv('DISCORD_TOKEN'))
