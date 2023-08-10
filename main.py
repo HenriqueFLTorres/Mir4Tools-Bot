@@ -86,7 +86,7 @@ async def on_message(message):
             originalImage = utils.addAlphaChannels(inventoryImage)
 
             inventoryImage = originalImage.copy()
-            trade = cv2.imread(r".\trade.png", cv2.IMREAD_UNCHANGED)
+            trade = cv2.imread(r".\items\trade.png", cv2.IMREAD_UNCHANGED)
 
             for item in items:
                 itemTemplate = cv2.imread(rf".\items\{item}.png", cv2.IMREAD_UNCHANGED)
