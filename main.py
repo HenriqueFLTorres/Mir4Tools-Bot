@@ -14,10 +14,12 @@ from translation import en, pt
 items = [
     "anima_stone",
     "blue_devil_stone",
+    
     # "copper",
     # "dark_steel",
     # "dragon_leather",
     # "energy",
+
     "evil_minded_orb",
     "exorcism_bauble",
     "glittering_powder",
@@ -26,6 +28,7 @@ items = [
     "platinum",
     "quintessence",
     "steel",
+
     # "dragon_eye",
     # "dragon_scale",
     # "dragon_claw",
