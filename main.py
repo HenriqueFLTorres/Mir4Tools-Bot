@@ -12,6 +12,7 @@ import json
 from translation import en, pt
 import os
 os.chdir("./items/trade.png")
+print(os.listdir())
 
 items = [
     "anima_stone",
