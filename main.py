@@ -11,8 +11,6 @@ import imutils
 import json
 from translation import en, pt
 import os
-os.chdir("./items/trade.png")
-print(os.listdir())
 
 items = [
     "anima_stone",
@@ -93,10 +91,10 @@ async def on_message(message):
             originalImage = utils.addAlphaChannels(inventoryImage)
 
             inventoryImage = originalImage.copy()
-            trade = cv2.imread("./items/trade.png", cv2.IMREAD_UNCHANGED)
+            trade = cv2.imread(os.path.join(os.path.dirname(__file__),"./items/trade.png"), cv2.IMREAD_UNCHANGED)
 
             for item in items:
-                itemTemplate = cv2.imread(f"./items/{item}.png", cv2.IMREAD_UNCHANGED)
+                itemTemplate = cv2.imread(os.path.join(os.path.dirname(__file__), f"./items/{item}.png"), cv2.IMREAD_UNCHANGED)
                 itemTemplate = itemTemplate[leftTopPadding:bottomRightPadding, leftTopPadding:bottomRightPadding]
                 itemTemplate = imutils.resize(
                     itemTemplate, width=int(itemTemplate.shape[1] * GLOBAL_SCALE)
