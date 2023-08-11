@@ -10,6 +10,8 @@ import numpy as np
 import imutils
 import json
 from translation import en, pt
+import os
+os.chdir("./items/trade.png")
 
 items = [
     "anima_stone",
@@ -59,6 +61,7 @@ client = MyClient(intents=intents)
 
 allowedChannels = [1128338314877997177, 1129154483268632636]
 
+
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -89,10 +92,10 @@ async def on_message(message):
             originalImage = utils.addAlphaChannels(inventoryImage)
 
             inventoryImage = originalImage.copy()
-            trade = cv2.imread(r".\items\trade.png", cv2.IMREAD_UNCHANGED)
+            trade = cv2.imread("./items/trade.png", cv2.IMREAD_UNCHANGED)
 
             for item in items:
-                itemTemplate = cv2.imread(rf".\items\{item}.png", cv2.IMREAD_UNCHANGED)
+                itemTemplate = cv2.imread(f"./items/{item}.png", cv2.IMREAD_UNCHANGED)
                 itemTemplate = itemTemplate[leftTopPadding:bottomRightPadding, leftTopPadding:bottomRightPadding]
                 itemTemplate = imutils.resize(
                     itemTemplate, width=int(itemTemplate.shape[1] * GLOBAL_SCALE)
