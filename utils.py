@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = r"/app/.apt/usr/bin/tesseract"
+pytesseract.pytesseract.tesseract_cmd = r"./usr/share/tesseract-ocr/5/tessdata"
 
 GLOBAL_SCALE = 1.42
 threshold = 0.85
