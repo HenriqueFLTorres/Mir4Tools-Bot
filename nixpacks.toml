@@ -1,2 +1,4 @@
 [phases.setup]
 nixPkgs = ["...", "tesseract"]
+[start]
+cmds = ['find -iname tessdata', 'dir /s tessdata']
