@@ -46,6 +46,8 @@ load_dotenv()
 intents = discord.Intents.all()
 
 my_guild = discord.Object(id=1127618095687671909)
+ROLES_CHANNEL = 1129159066086801578
+ROLES_MESSAGE = 1140727328322879608
 
 class MyClient(discord.Client):
     def __init__(self, *, intents: Intents):
@@ -143,46 +145,29 @@ class BotViewPT(discord.ui.View):
         await interaction.response.send_message(f"Este é um objeto JSON, copie e cole em seu inventário de https://www.mir4tools.com/ \n\n```json\n{json.dumps(self.inventory, indent=2)}\n```\n", ephemeral=True)
 
 @client.event
-async def on_reaction_add(reaction: discord.Reaction, user: discord.Member):
-    if reaction.message.channel.id != 1129159066086801578:
-        return
-
-    emoji = str(reaction.emoji)
-    if emoji == "🇺🇸":
-        await toggleRole(1129148272309702756, user, True)
-    if emoji == "🇧🇷":
-        await toggleRole(1129148360591425596, user, True)
-    if emoji == "📢":
-        await toggleRole(1129148508721647657, user, True)
-        
-@client.event
-async def on_reaction_remove(reaction: discord.Reaction, user: discord.Member):
-    if reaction.message.channel.id != 1129159066086801578:
+async def on_raw_reaction_add(event: discord.RawReactionActionEvent):
+    if event.message_id != 1140727328322879608:
         return
     
-    emoji = str(reaction.emoji)
+    emoji = str(event.emoji)
     if emoji == "🇺🇸":
-        await toggleRole(1129148272309702756, user, False)
+        await addRole(1129148272309702756, event.user_id)
     if emoji == "🇧🇷":
-        await toggleRole(1129148360591425596, user, False)
+        await addRole(1129148360591425596, event.user_id)
     if emoji == "📢":
-        await toggleRole(1129148508721647657, user, False)
+        await addRole(1129148508721647657, event.user_id)
 
-async def toggleRole(id: int, user: discord.Member, add: bool):
-    role = discord.Object(id)
+async def addRole(roleId: int, userId: int):
+    role = discord.Object(roleId)
+    guild = await client.fetch_guild(1127618095687671909)
+    user = await guild.fetch_member(userId)
 
-    if (add):
-        return await user.add_roles(role)
-    else:
-        return await user.remove_roles(role)
+    return await user.add_roles(role)
 
 @client.event
 async def on_ready():
-    channel = client.get_channel(1129159066086801578)
-    async for message in channel.history(limit=5):
-        await message.delete()
-
-    message = await channel.send(content="# Select your role\n\n:loudspeaker:  Get pinged when a new update came out.\n:loudspeaker:  Receba um ping quando uma nova atualização for lançada.\n\n:flag_us:  English (US)\n:flag_br:  Português (PT-BR)")
+    channel = client.get_channel(ROLES_CHANNEL)
+    message = await channel.fetch_message(ROLES_MESSAGE)
 
     await message.add_reaction("🇺🇸")
     await message.add_reaction("🇧🇷")
