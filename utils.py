@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = r"./usr/share/tesseract-ocr/5/tessdata"
-
 GLOBAL_SCALE = 1.42
 threshold = 0.85
 frameOffset = int(np.round(33 * GLOBAL_SCALE))
