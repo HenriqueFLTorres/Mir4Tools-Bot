@@ -209,3 +209,24 @@ def findTraddables(image, top, left, tradeIcon, inventoryImage):
         )
 
     return len(yloc) > 0
+
+items = [
+    "anima_stone",
+    "blue_devil_stone",
+    # "copper",
+    # "dark_steel",
+    # "dragon_leather",
+    # "energy",
+    "evil_minded_orb",
+    "exorcism_bauble",
+    "glittering_powder",
+    "illuminating_fragment",
+    "moon_shadow_stone",
+    "platinum",
+    "quintessence",
+    "steel",
+    # "dragon_eye",
+    # "dragon_scale",
+    # "dragon_claw",
+    # "dragon_horn",
+]
