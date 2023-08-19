@@ -1,9 +1,9 @@
+from inventoryDetection import handleImageDetection
 import discord
 import os
 from discord.flags import Intents
 from dotenv import load_dotenv
 import asyncio
-from inventoryDetection import handleImageDetection
 
 load_dotenv()
 intents = discord.Intents.all()
