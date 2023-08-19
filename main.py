@@ -1,4 +1,4 @@
-from inventoryDetection import handleImageDetection
+import inventoryDetection
 import discord
 import os
 from discord.flags import Intents
@@ -37,7 +37,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    await handleImageDetection(message)
+    await inventoryDetection.handleImageDetection(message)
 
 @client.event
 async def on_raw_reaction_add(event: discord.RawReactionActionEvent):
