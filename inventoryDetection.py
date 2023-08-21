@@ -1,4 +1,3 @@
-from main import client
 import io
 import utils
 import cv2
@@ -16,8 +15,8 @@ GLOBAL_SCALE = 1.42
 leftTopPadding = 30
 bottomRightPadding = 62
 
-async def handleImageDetection(message):
-    if message.author == client.user:
+async def handleImageDetection(message: str, clientId: int):
+    if message.author == clientId:
         return
 
     if not message.channel.id in allowedChannels or len(message.attachments) == 0:
@@ -61,7 +60,7 @@ async def handleImageDetection(message):
         
         title = translation["'s inventory matching result"]
         embed = discord.Embed(title=f"{message.author.global_name}{title}", color=0x2C2542, type="rich", description=translation["Recently added feature - please be patient as this is a new feature which still being worked on. If you have any trouble, please report issues to the Mir4Tools administrators."])
-        embed.set_thumbnail(url=client.user.avatar)
+        embed.set_thumbnail(url=main.client.user.avatar)
         embed.set_footer(text=translation["Click on the button bellow to get a JSON from your inventory match"])
 
         _, buffer = cv2.imencode(".png", utils.vconcat_resize(finalImages))
