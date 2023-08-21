@@ -37,7 +37,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    await handleImageDetection(message, client.user)
+    await handleImageDetection(message, client.user, client.user.avatar)
 
 @client.event
 async def on_raw_reaction_add(event: discord.RawReactionActionEvent):
