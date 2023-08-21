@@ -15,7 +15,7 @@ GLOBAL_SCALE = 1.42
 leftTopPadding = 30
 bottomRightPadding = 62
 
-async def handleImageDetection(message: str, clientId: int, avatar: discord.Asset | None):
+async def handleImageDetection(message: str, clientId: int, avatar: discord.Asset):
     if message.author == clientId:
         return
 
