@@ -61,36 +61,15 @@ async def handleImageDetection(message: str, clientId: int, avatar: discord.Asse
         title = translation["'s inventory matching result"]
         embed = discord.Embed(title=f"{message.author.global_name}{title}", color=0x2C2542, type="rich", description=translation["Recently added feature - please be patient as this is a new feature which still being worked on. If you have any trouble, please report issues to the Mir4Tools administrators."])
         embed.set_thumbnail(url=avatar)
-        embed.set_footer(text=translation["Click on the button bellow to get a JSON from your inventory match"])
 
         _, buffer = cv2.imencode(".png", utils.vconcat_resize(finalImages))
         io_buf = io.BytesIO(buffer)
         finalResult = discord.File(io_buf, filename="mir4-inventory-matching.png")
-
-        view = BotView(inventory=PlayerInventory) if language == "en" else BotViewPT(inventory=PlayerInventory)
-
-        await message.reply(embed=embed, view=view, files=[finalResult])
+        
+        await message.reply(embed=embed, files=[finalResult, discord.File(io.StringIO(json.dumps(PlayerInventory, indent=2)), filename="inventory.json")])
         await message.clear_reaction("🕓")
         await message.add_reaction("✅")
     except Exception as error:
         print(error)
         await message.clear_reaction("🕓")
         await message.add_reaction("❌")
-
-class BotView(discord.ui.View):
-    def __init__(self,inventory):
-        super().__init__()
-        self.inventory = inventory
-
-    @discord.ui.button(label="Click to see the results in JSON", style=discord.ButtonStyle.primary, emoji="👀")
-    async def button_callback(self, interaction, _):
-        await interaction.response.send_message(f"This is a JSON object, copy it and paste on your inventory of https://www.mir4tools.com/ \n\n```json\n{json.dumps(self.inventory, indent=2)}\n```\n", ephemeral=True)
-
-class BotViewPT(discord.ui.View):
-    def __init__(self,inventory):
-        super().__init__()
-        self.inventory = inventory
-
-    @discord.ui.button(label="Clique para ver os resultados em JSON", style=discord.ButtonStyle.primary, emoji="👀")
-    async def button_callback(self, interaction, _):
-        await interaction.response.send_message(f"Este é um objeto JSON, copie e cole em seu inventário de https://www.mir4tools.com/ \n\n```json\n{json.dumps(self.inventory, indent=2)}\n```\n", ephemeral=True)
