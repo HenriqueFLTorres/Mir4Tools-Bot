@@ -4,7 +4,8 @@ from discord.flags import Intents
 from dotenv import load_dotenv
 import asyncio
 from inventoryDetection import handleImageDetection
-from discordUtils import toggleRole, handleRoleAdd, handleRoleRemove
+from discordUtils import handleRoleAdd, handleRoleRemove
+from embeds import prepareReportEmbed, suggestionEmbed, bugReportEmbed
 
 load_dotenv()
 intents = discord.Intents.all()
@@ -59,10 +60,9 @@ async def on_raw_reaction_remove(event: discord.RawReactionActionEvent):
 
 @client.tree.command(name="prepare_report", guild=my_guild)
 async def prepare_report(interaction: discord.Interaction):
-    embed = discord.Embed(title=f"Contact us", color=0x2C2542, type="rich", description="Interact with the buttons bellow to either make a suggestion or a bug report, the bot will send you a private message after the interaction so you can describe the issue.")
-    embed.set_thumbnail(url=client.user.avatar)
+    prepareReportEmbed.set_thumbnail(url=client.user.avatar)
 
-    await interaction.response.send_message(embed=embed, view=BotReportView())
+    await interaction.response.send_message(embed=prepareReportEmbed, view=BotReportView())
 
 class BotReportView(discord.ui.View):
     def __init__(self):
@@ -80,10 +80,9 @@ class BotReportView(discord.ui.View):
         if (interaction.user.id in self.ongoing): return
         self.addId(interaction.user.id)
 
-        embed = discord.Embed(title=f"Suggestion creation", color=0x2C2542, type="rich", description="Type your suggestion in only one message. If you want to cancel this interaction, click on the Cancel button.\n\nThis interaction will expire after 15 minutes.")
-        embed.set_thumbnail(url=client.user.avatar)
+        suggestionEmbed.set_thumbnail(url=client.user.avatar)
 
-        await interaction.user.send(embed=embed, view=BotReportResponseView(trigger=self.removeId))
+        await interaction.user.send(embed=suggestionEmbed, view=BotReportResponseView(trigger=self.removeId))
 
         def check(message: discord.Message):
             return message.channel.type == discord.ChannelType.private and message.author == interaction.user
@@ -105,10 +104,9 @@ class BotReportView(discord.ui.View):
         if (interaction.user.id in self.ongoing): return
         self.addId(interaction.user.id)
 
-        embed = discord.Embed(title=f"Bug report", color=0x2C2542, type="rich", description="Type your report in only one message as the following template:\n\n Page name: Constitution \n Feature name: Tier selection \n How to reproduce: ... \n\n If you want to cancel this interaction, click on the Cancel button.\n\nThis interaction will expire after 15 minutes.")
-        embed.set_thumbnail(url=client.user.avatar)
+        bugReportEmbed.set_thumbnail(url=client.user.avatar)
 
-        await interaction.user.send(embed=embed, view=BotReportResponseView(trigger=self.removeId))
+        await interaction.user.send(embed=bugReportEmbed, view=BotReportResponseView(trigger=self.removeId))
         
         def check(message: discord.Message):
             return message.channel.type == discord.ChannelType.private and message.author == interaction.user
