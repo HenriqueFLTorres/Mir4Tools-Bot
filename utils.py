@@ -38,7 +38,7 @@ def checkItemRarity(top, bottom, left, right, originalImage, inventoryImage):
 
     if np.any(np.all(colorFrame == (13, 210, 237, 255), axis=-1)):
         rarity = "Legendary"
-    elif np.any(np.all(colorFrame == (42, 49, 183, 255), axis=-1)):
+    elif np.any(np.all(colorFrame == (51, 62, 216, 255), axis=-1)):
         rarity = "Epic"
     elif np.any(np.all(colorFrame == (199, 122, 66, 255), axis=-1)):
         rarity = "Rare"
@@ -67,7 +67,8 @@ def checkItemAmount(
 ):
     matchedValue = originalImage.copy()
     matchedValue = originalImage[top:bottom, left:right]
-    matchedValue[np.all(matchedValue <= (210, 210, 210, 255), axis=-1)] = (0, 0, 0, 255)
+    matchedValue[np.all(matchedValue <= (200, 200, 200, 255), axis=-1)] = (0, 0, 0, 255)
+
 
     # Epic item tweak
     if rarity == "Epic":
@@ -79,6 +80,12 @@ def checkItemAmount(
     if item == "exorcism_bauble":
         GreenMin = np.array([94, 200, 120, 255], np.uint8)
         GreenMax = np.array([167, 251, 167, 255], np.uint8)
+        matchedValue[cv2.inRange(matchedValue, GreenMin, GreenMax) > 0] = [0, 0, 0, 255]
+
+    # Quintessence light pixels tweak
+    if item == "quintessence":
+        GreenMin = np.array([140, 127, 120, 255], np.uint8)
+        GreenMax = np.array([250, 250, 209, 255], np.uint8)
         matchedValue[cv2.inRange(matchedValue, GreenMin, GreenMax) > 0] = [0, 0, 0, 255]
 
     denoise = cv2.fastNlMeansDenoisingColored(matchedValue, None, 44, 10, 4, 21)
