@@ -4,6 +4,7 @@ from discord.flags import Intents
 from dotenv import load_dotenv
 import asyncio
 from inventoryDetection import handleImageDetection
+from discordUtils import toggleRole, handleRoleAdd, handleRoleRemove
 
 load_dotenv()
 intents = discord.Intents.all()
@@ -43,16 +44,17 @@ async def on_message(message):
 
 @client.event
 async def on_raw_reaction_add(event: discord.RawReactionActionEvent):
-    if event.message_id != ROLES_MESSAGE:
-        return
-    
-    emoji = str(event.emoji)
-    if emoji == "🇺🇸":
-        await addRole(1129148272309702756, event.user_id)
-    if emoji == "🇧🇷":
-        await addRole(1129148360591425596, event.user_id)
-    if emoji == "📢":
-        await addRole(1129148508721647657, event.user_id)
+    guild = await client.fetch_guild(guild_id)
+    user = await guild.fetch_member(event.user_id)
+
+    await handleRoleAdd(event, user)
+
+@client.event
+async def on_raw_reaction_remove(event: discord.RawReactionActionEvent):
+    guild = await client.fetch_guild(guild_id)
+    user = await guild.fetch_member(event.user_id)
+
+    await handleRoleRemove(event, user)
 
 
 @client.tree.command(name="prepare_report", guild=my_guild)
@@ -132,12 +134,5 @@ class BotReportResponseView(discord.ui.View):
     async def cancel_callback(self, interaction: discord.Interaction, _):
         self.trigger(interaction.user.id)
         await interaction.user.send(content="Interaction canceled.")
-
-async def addRole(roleId: int, userId: int):
-    role = discord.Object(roleId)
-    guild = await client.fetch_guild(guild_id)
-    user = await guild.fetch_member(userId)
-
-    return await user.add_roles(role)
 
 client.run(os.getenv('DISCORD_TOKEN'))
