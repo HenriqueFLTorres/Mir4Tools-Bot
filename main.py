@@ -8,7 +8,9 @@ from inventoryDetection import handleImageDetection
 load_dotenv()
 intents = discord.Intents.all()
 
-my_guild = discord.Object(id=1127618095687671909)
+guild_id = 1127618095687671909
+my_guild = discord.Object(id=guild_id)
+admin_channel = 1141774925552689153
 ROLES_CHANNEL = 1129159066086801578
 ROLES_MESSAGE = 1140727328322879608
 
@@ -41,7 +43,7 @@ async def on_message(message):
 
 @client.event
 async def on_raw_reaction_add(event: discord.RawReactionActionEvent):
-    if event.message_id != 1140727328322879608:
+    if event.message_id != ROLES_MESSAGE:
         return
     
     emoji = str(event.emoji)
@@ -90,7 +92,7 @@ class BotReportView(discord.ui.View):
             
             reportEmbed = discord.Embed(title="Suggestion", color=0x2C2542, type="rich", description=message.content)
             reportEmbed.set_author(name=message.author)
-            await client.get_channel(1141774925552689153).send(embed=reportEmbed)
+            await client.get_channel(admin_channel).send(embed=reportEmbed)
             self.ongoing.remove(interaction.user.id)
         except asyncio.TimeoutError:
             self.ongoing.remove(interaction.user.id)
@@ -115,7 +117,7 @@ class BotReportView(discord.ui.View):
 
             reportEmbed = discord.Embed(title="Bug report", color=0x2C2542, type="rich", description=message.content)
             reportEmbed.set_author(name=message.author)
-            await client.get_channel(1141774925552689153).send(embed=reportEmbed)
+            await client.get_channel(admin_channel).send(embed=reportEmbed)
             self.ongoing.remove(interaction.user.id)
         except asyncio.TimeoutError:
             self.ongoing.remove(interaction.user.id)
@@ -133,7 +135,7 @@ class BotReportResponseView(discord.ui.View):
 
 async def addRole(roleId: int, userId: int):
     role = discord.Object(roleId)
-    guild = await client.fetch_guild(1127618095687671909)
+    guild = await client.fetch_guild(guild_id)
     user = await guild.fetch_member(userId)
 
     return await user.add_roles(role)
