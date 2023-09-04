@@ -10,12 +10,13 @@ import json
 
 allowedChannels = [1128338314877997177, 1129154483268632636]
 
-PlayerInventory = {}
 GLOBAL_SCALE = 1.42
 leftTopPadding = 30
 bottomRightPadding = 62
 
 async def handleImageDetection(message: str, clientId: int, avatar: discord.Asset):
+    PlayerInventory = {}
+
     if message.author == clientId:
         return
 
@@ -65,8 +66,13 @@ async def handleImageDetection(message: str, clientId: int, avatar: discord.Asse
         _, buffer = cv2.imencode(".png", utils.vconcat_resize(finalImages))
         io_buf = io.BytesIO(buffer)
         finalResult = discord.File(io_buf, filename="mir4-inventory-matching.png")
+
+        inventoryJSON = json.dumps(PlayerInventory, indent=2)
+        print(inventoryJSON)
+        jsonIO = io.StringIO(inventoryJSON)
+        inventoryFile = discord.File(jsonIO, filename="inventory.json")
         
-        await message.reply(embed=embed, files=[finalResult, discord.File(io.StringIO(json.dumps(PlayerInventory, indent=2)), filename="inventory.json")])
+        await message.reply(embed=embed, files=[finalResult, inventoryFile])
         await message.clear_reaction("🕓")
         await message.add_reaction("✅")
     except Exception as error:
