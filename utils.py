@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import pytesseract
 
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
 GLOBAL_SCALE = 1.42
 threshold = 0.85
 frameOffset = int(np.round(33 * GLOBAL_SCALE))
@@ -33,7 +35,7 @@ def addAlphaChannels(image):
 
 
 def checkItemRarity(top, bottom, left, right, originalImage, inventoryImage):
-    colorFrame = originalImage.copy()[top + 20 : bottom, left : right + 5]
+    colorFrame = originalImage.copy()[top + 20 : bottom, left : right + 10]
     rarity = None
 
     if np.any(np.all(colorFrame == (13, 210, 237, 255), axis=-1)):
