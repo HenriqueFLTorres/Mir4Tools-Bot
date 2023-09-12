@@ -12,10 +12,12 @@ result = [
     {'blue_devil_stone': {'Rare': {'traddable': 2, 'nonTraddable': 23}}},
     {'anima_stone': {'Epic': {'traddable': 22, 'nonTraddable': 78}}, 'illuminating_fragment': {'Epic': {'nonTraddable': 13}}, 'platinum': {'Epic': {'traddable': 43, 'nonTraddable': 257}}},
     {'anima_stone': {'Uncommon': {'traddable': 6209}}, 'evil_minded_orb': {'Uncommon': {'traddable': 12799, 'nonTraddable': 330}}, 'exorcism_bauble': {'Uncommon': {'traddable': 5457, 'nonTraddable': 170}}, 'illuminating_fragment': {'Uncommon': {'traddable': 10056, 'nonTraddable': 237}}, 'moon_shadow_stone': {'Uncommon': {'traddable': 12579, 'nonTraddable': 357}}, 'platinum': {'Uncommon': {'traddable': 38627, 'nonTraddable': 123}}, 'quintessence': {'Uncommon': {'traddable': 5757, 'nonTraddable': 243}}, 'steel': {'Uncommon': {'traddable': 44555, 'nonTraddable': 5593}}},
+    {'anima_stone': {'Uncommon': {'traddable': 477, 'nonTraddable': 11}}, 'evil_minded_orb': {'Uncommon': {'traddable': 103, 'nonTraddable': 1}}, 'exorcism_bauble': {'Uncommon': {'traddable': 102}}, 'illuminating_fragment': {'Uncommon': {'traddable': 414, 'nonTraddable': 12}}, 'moon_shadow_stone': {'Uncommon': {'traddable': 73}}, 'platinum': {'Uncommon': {'traddable': 871, 'nonTraddable': 81}}, 'quintessence': {'Uncommon': {'traddable': 406, 'nonTraddable': 37}}, 'steel': {'Uncommon': {'traddable': 809, 'nonTraddable': 210}}},
+    {'anima_stone': {'Rare': {'traddable': 5, 'nonTraddable': 11}}, 'evil_minded_orb': {'Rare': {'traddable': 9, 'nonTraddable': 59}}, 'exorcism_bauble': {'Rare': {'traddable': 16, 'nonTraddable': 73}}, 'illuminating_fragment': {'Rare': {'traddable': 10, 'nonTraddable': 14}}, 'moon_shadow_stone': {'Rare': {'traddable': 20, 'nonTraddable': 39}}, 'platinum': {'Rare': {'traddable': 34, 'nonTraddable': 70}}, 'quintessence': {'Rare': {'traddable': 6, 'nonTraddable': 62}}, 'steel': {'Rare': {'traddable': 34, 'nonTraddable': 181}}}
 ]
 
 def testMatching():
-    for index, file in enumerate(["./test/1.png", "./test/2.png", "./test/3.png", "./test/4.png"]):
+    for index, file in enumerate(["./test/1.png","./test/2.png","./test/3.png","./test/4.png","./test/5.png","./test/6.png",]):
         PlayerInventory = {}
         
         inventoryImage = cv2.imread(os.path.join(os.path.dirname(__file__), file), -1) # 'Load it as it is'
