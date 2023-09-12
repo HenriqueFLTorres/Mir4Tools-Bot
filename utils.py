@@ -89,6 +89,11 @@ def checkItemAmount(
         GreenMax = np.array([167, 251, 167, 255], np.uint8)
         matchedValue[cv2.inRange(matchedValue, GreenMin, GreenMax) > 0] = [0, 0, 0, 255]
 
+    if item == "illuminating_fragment":
+        GreenMin = np.array([195, 186, 143, 255], np.uint8)
+        GreenMax = np.array([241, 224, 197, 255], np.uint8)
+        matchedValue[cv2.inRange(matchedValue, GreenMin, GreenMax) > 0] = [0, 0, 0, 255]
+
     if item == "quintessence":
         GreenMin = np.array([140, 127, 120, 255], np.uint8)
         GreenMax = np.array([250, 250, 209, 255], np.uint8)
