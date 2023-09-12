@@ -71,20 +71,24 @@ def checkItemAmount(
     matchedValue = originalImage[top:bottom, left:right]
     matchedValue[np.all(matchedValue <= (200, 200, 200, 255), axis=-1)] = (0, 0, 0, 255)
 
-
-    # Epic item tweak
+    ###
+    # Specific tweak's
+    ###
     if rarity == "Epic":
         EpicMin = np.array([0, 0, 0, 255], np.uint8)
         EpicMax = np.array([120, 200, 255, 255], np.uint8)
         matchedValue[cv2.inRange(matchedValue, EpicMin, EpicMax) > 0] = [0, 0, 0, 255]
 
-    # Exorcism bauble tweak
+    if item == "anima_stone":
+        OrangeMin = np.array([45, 96, 200, 255], np.uint8)
+        OrangeMax = np.array([100, 171, 245, 255], np.uint8)
+        matchedValue[cv2.inRange(matchedValue, OrangeMin, OrangeMax) > 0] = [0, 0, 0, 255]
+
     if item == "exorcism_bauble":
         GreenMin = np.array([94, 200, 120, 255], np.uint8)
         GreenMax = np.array([167, 251, 167, 255], np.uint8)
         matchedValue[cv2.inRange(matchedValue, GreenMin, GreenMax) > 0] = [0, 0, 0, 255]
 
-    # Quintessence light pixels tweak
     if item == "quintessence":
         GreenMin = np.array([140, 127, 120, 255], np.uint8)
         GreenMax = np.array([250, 250, 209, 255], np.uint8)
