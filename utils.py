@@ -49,6 +49,9 @@ def checkItemRarity(top, bottom, left, right, originalImage, inventoryImage):
     elif np.any(np.all(colorFrame == (122, 120, 117, 255), axis=-1)):
         rarity = "Common"
 
+    if rarity == None:
+        raise Exception("Rarity not detected")
+
     cv2.putText(
         inventoryImage,
         rarity,
