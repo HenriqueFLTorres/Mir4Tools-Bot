@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import pytesseract
 
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 GLOBAL_SCALE = 1.42
 threshold = 0.85
@@ -164,6 +164,9 @@ def searchItem(
         rectangles.append([int(left), int(top), int(right), int(bottom)])
         rectangles.append([int(left), int(top), int(right), int(bottom)])
 
+    rectangles, _ = cv2.groupRectangles(rectangles, 1, 0.15)
+
+    for left, top, right, bottom in rectangles:
         cv2.rectangle(
             inventoryImage,
             (left, top),
@@ -171,10 +174,6 @@ def searchItem(
             (101, 62, 71, 255),
             2,
         )
-
-    rectangles, _ = cv2.groupRectangles(rectangles, 1, 0.2)
-
-    for left, top, right, bottom in rectangles:
         frame = originalImage.copy()
         frame = frame[top:bottom, left:right]
 
