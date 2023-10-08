@@ -13,7 +13,6 @@ result = [
     {'anima_stone': {'Epic': {'traddable': 22, 'nonTraddable': 78}}, 'illuminating_fragment': {'Epic': {'nonTraddable': 13}}, 'platinum': {'Epic': {'traddable': 43, 'nonTraddable': 257}}},
     {'anima_stone': {'Uncommon': {'traddable': 6209}}, 'evil_minded_orb': {'Uncommon': {'traddable': 12799, 'nonTraddable': 330}}, 'exorcism_bauble': {'Uncommon': {'traddable': 5457, 'nonTraddable': 170}}, 'illuminating_fragment': {'Uncommon': {'traddable': 10056, 'nonTraddable': 237}}, 'moon_shadow_stone': {'Uncommon': {'traddable': 12579, 'nonTraddable': 357}}, 'platinum': {'Uncommon': {'traddable': 38627, 'nonTraddable': 123}}, 'quintessence': {'Uncommon': {'traddable': 5757, 'nonTraddable': 243}}, 'steel': {'Uncommon': {'traddable': 44555, 'nonTraddable': 5593}}},
     {'anima_stone': {'Uncommon': {'traddable': 477, 'nonTraddable': 11}}, 'evil_minded_orb': {'Uncommon': {'traddable': 103, 'nonTraddable': 1}}, 'exorcism_bauble': {'Uncommon': {'traddable': 102}}, 'illuminating_fragment': {'Uncommon': {'traddable': 414, 'nonTraddable': 12}}, 'moon_shadow_stone': {'Uncommon': {'traddable': 73}}, 'platinum': {'Uncommon': {'traddable': 871, 'nonTraddable': 81}}, 'quintessence': {'Uncommon': {'traddable': 406, 'nonTraddable': 37}}, 'steel': {'Uncommon': {'traddable': 809, 'nonTraddable': 210}}},
-    {},
     {'anima_stone': {'Rare': {'traddable': 5, 'nonTraddable': 11}}, 'evil_minded_orb': {'Rare': {'traddable': 9, 'nonTraddable': 59}}, 'exorcism_bauble': {'Rare': {'traddable': 16, 'nonTraddable': 73}}, 'illuminating_fragment': {'Rare': {'traddable': 10, 'nonTraddable': 14}}, 'moon_shadow_stone': {'Rare': {'traddable': 20, 'nonTraddable': 39}}, 'platinum': {'Rare': {'traddable': 34, 'nonTraddable': 70}}, 'quintessence': {'Rare': {'traddable': 6, 'nonTraddable': 62}}, 'steel': {'Rare': {'traddable': 34, 'nonTraddable': 181}}},
     {'anima_stone': {'Epic': {'traddable': 1, 'nonTraddable': 17}}, 'exorcism_bauble': {'Epic': {'nonTraddable': 20}}, 'illuminating_fragment': {'Epic': {'nonTraddable': 31, 'traddable': 2}}, 'platinum': {'Epic': {'traddable': 10, 'nonTraddable': 116}}, 'quintessence': {'Epic': {'nonTraddable': 19}}, 'steel': {'Epic': {'nonTraddable': 2}}},
     {'blue_devil_stone': {'Epic': {'traddable': 13, 'nonTraddable': 56}}, 'flower_oil': {'Epic': {'nonTraddable': 982}}, 'moonlight_magic_stone': {'Epic': {'traddable': 4, 'nonTraddable': 18}}, 'purified_water': {'Epic': {'traddable': 2, 'nonTraddable': 31}}, 'reishi': {'Epic': {'nonTraddable': 15}}},
@@ -28,7 +27,7 @@ result = [
 ]
 
 def testMatching():
-    for index in range(10, 11):
+    for index in range(1, 17):
         PlayerInventory = {}
         file = f"./test/{index}.png"
         
@@ -48,8 +47,8 @@ def testMatching():
 
             searchItem(itemTemplate, item, originalImage, tradeIcon, inventoryImage, PlayerInventory)
 
-        print(PlayerInventory)
-        # assert PlayerInventory == result[index]
+        print(index)
+        assert PlayerInventory == result[index - 1]
 
         cv2.imshow("result", inventoryImage)
         cv2.waitKey(0)
